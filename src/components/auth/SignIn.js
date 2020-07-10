@@ -1,4 +1,5 @@
 import React, {useState, useContext} from 'react'
+import { signInWithGoogle } from '../../firebase/firebase.utils'
 import { AuthContext } from '../../context/auth/authState'
 
 const SignIn = () => {
@@ -44,6 +45,7 @@ const SignIn = () => {
               <input type="submit"/>
             </div>
           </form>
+          <button className="bg-red-500 rounded" onClick={signInWithGoogle}>Google SignIN</button>
         </div>
       );
     };

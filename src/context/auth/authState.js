@@ -1,77 +1,56 @@
 import React, { useReducer, createContext } from "react";
-import axios from 'axios'
+import { createUserProfileDocument, auth } from "../../firebase/firebase.utils";
 import authReducer from "./authReducer";
 
-import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, AUTH_ERROR, REGISTER_FAIL, REGISTER_SUCCESS, } from '../types'
+import { SET_CURRENT_USER } from "../types";
 
 export const AuthContext = createContext();
 
-
 const AuthState = (props) => {
-    const [state, dispatch] = useReducer(authReducer, {
-      token: localStorage.getItem('token'),
-      isAuthenticated: null,
-      loading: true,
-      error: null,
-      user: null
+  const [state, dispatch] = useReducer(authReducer, {
+    authState: null,
+    loading: true,
+  });
+
+  //Intialize User Auth / Sign In
+  const initializeAuth = () => {
+    console.log("run");
+    let unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
+      console.log(user);
+      if (user) {
+        const userRef = await createUserProfileDocument(user);
+        userRef.onSnapshot((snap) => {
+          dispatch({
+            type: SET_CURRENT_USER,
+            payload: {
+              curretUser: {
+                id: snap.id,
+                ...snap.data(),
+              },
+            },
+          });
+        });
+      }
+      dispatch({
+        //this essentials sets current user to null if user signs out
+        type: SET_CURRENT_USER,
+        payload: user,
+      });
+      return () => unsubscribeFromAuth(); //The returned function will be called just before every rerendering of the component
     });
+  };
 
-    //Load User
+  return (
+    <AuthContext.Provider
+      value={{
+        authState: state.authState,
+        loading: state.loading,
+        initializeAuth,
+      }}
+    >
+      {props.children}
+    </AuthContext.Provider>
+  );
+};
 
-    const loadUser = () => {
-      console.log('load user')
-    }
-
-    //Register User
-    const register = async formData => {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-
-      try {
-        const res = await axios.post('/api/users', formData, config)
-        console.log(res.data)
-        dispatch({
-          type: REGISTER_SUCCESS,
-          payload: res.data
-        })
-      } catch (err) {
-        dispatch({
-          type: REGISTER_FAIL,
-          payload: err.response.data.msg
-        })
-      }
-    }
-    //Login User
-      const login = () => {
-      console.log('load user')
-    }
-    //Logout
-      const logout = () => {
-      console.log('load user')
-    }
-    //Clear Errors
-
-    return (
-        <AuthContext.Provider
-            value={{
-              token: state.token,
-              isAuthenticated: state.isAuthenticated,
-              loading: true,
-              user: state.user,
-              error: state.error,
-              register,
-              loadUser,
-              login,
-              logout
-            }}
-        >
-           {props.children}
-        </AuthContext.Provider>
-    )
-  
-}
-
-export default AuthState
+export default AuthState;
