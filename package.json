@@ -13,8 +13,11 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "build:tailwind": "tailwindcss build src/assets/tailwind.css -o src/assets/main.css",
+    "prestart": "npm run build:tailwind",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "prod:build": "NODE_ENV=production npm run build:tailwind react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -32,5 +35,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^1.4.6"
   }
 }

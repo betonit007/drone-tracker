@@ -5,6 +5,8 @@ import AuthState from './context/auth/authState';
 import Test from './pages/Test';
 import SignInUp from './pages/SignInUp';
 
+import './assets/main.css'
+
 
 const App = () => {
   
