@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useForm } from "react-hook-form";
 import { AuthContext } from '../../context/auth/authState'
 
 
@@ -6,59 +7,31 @@ const Register = () => {
 
   const authContext = useContext(AuthContext)
 
-  const { register } = authContext
+  const { register, handleSubmit, errors } = useForm(); //Intialize react-hook-form
 
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password2: "",
-  });
-
-  const { name, email, password, password2 } = user;
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-    
-      if (name && email && password && password) {
-      register({
-        name, email, password
-      })
-      setUser({name: '', email: '', password:'', password2: ''})
-    }
-  }
-
-  const onChange = e => {
-    const {name, value} = e.target
-    setUser({
-      ...user,
-      [name]:value
-    })
-  }
+  const { registerNonGoogle } = authContext
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input type="text" name="name" value={name} onChange={onChange} />
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" name="email" value={email} onChange={onChange} />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" value={password} onChange={onChange} />
-        </div>
-        <div>
-          <label htmlFor="password confirm">Confirm password</label>
-          <input type="password" name="password2" value={password2} onChange={onChange} />
-        </div>
-        <div>
-          <input type="submit"/>
-        </div>
+    <div className="form-body">
+      <form onSubmit={handleSubmit(registerNonGoogle)}>
+        <input name="name" placeholder="Name" ref={register} />{" "}
+        
+        <input
+          type="text"
+          placeholder="Email"
+          name="email"
+          ref={register({ required: true, pattern: /^\S+@\S+$/i })}
+        />
+        {errors.email && "Please enter a valid email address."}
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          ref={register({ required: true, minLength: 6 })}
+        />
+        {errors.password && "Password must be at least six characters long."}
+        
+        <input className="bg-green-500" type="submit" />
       </form>
     </div>
   );

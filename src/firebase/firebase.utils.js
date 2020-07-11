@@ -61,8 +61,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!snapShot.exists) {
     const { displayName, email, photoURL } = userAuth;
     const createdAt = new Date();
-    const colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"]
-    const randomColor = colors[Math.floor(Math.random()*7)];
 
     try {
       await userRef.set({
@@ -70,7 +68,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         email,
         createdAt,
         photoURL,
-        randomColor,
         ...additionalData,
       });
     } catch (err) {

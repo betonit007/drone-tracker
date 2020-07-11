@@ -14,9 +14,8 @@ const AuthState = (props) => {
 
   //Intialize User Auth / Sign In
   const initializeAuth = () => {
-    console.log("run");
     let unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
-      console.log(user);
+    
       if (user) {
         const userRef = await createUserProfileDocument(user);
         userRef.onSnapshot((snap) => {
@@ -40,12 +39,27 @@ const AuthState = (props) => {
     });
   };
 
+  const registerNonGoogle = async (data) => {
+    console.log(data)
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        data.email,
+        data.password
+      );
+
+      await createUserProfileDocument(user, { displayName: data.name });
+    } catch (err) {
+     console.log(err.message);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         authState: state.authState,
         loading: state.loading,
         initializeAuth,
+        registerNonGoogle
       }}
     >
       {props.children}
