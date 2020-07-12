@@ -22,7 +22,7 @@ const AuthState = (props) => {
           dispatch({
             type: SET_CURRENT_USER,
             payload: {
-              curretUser: {
+              currentUser: {
                 id: snap.id,
                 ...snap.data(),
               },

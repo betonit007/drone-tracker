@@ -7,7 +7,7 @@ export default(state, action) => {
             console.log(action.payload)
             return {
                 ...state,
-                ...action.payload, //will spread token into state
+                authState: action.payload, //will spread token into state
                 loading: false
             }
         default:
