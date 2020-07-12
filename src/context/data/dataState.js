@@ -1,7 +1,7 @@
 import React, { useReducer, createContext } from "react";
 import dataReducer from "./dataReducer";
 
-import { GET_DATA } from '../types'
+import { ADD_DRONE } from '../types'
 
 
 
@@ -10,20 +10,17 @@ export const DataContext = createContext();
 const DataState = (props) => {
   const [state, dispatch] = useReducer(dataReducer, {
     loading: false,
-    fetchedData: null,
-    more: true,
-    data: [],
-    after: 0,
+    downedDrones: ['phantom'],
   });
 
-  const fetchSomeData = async () => {  
+  const addDrone = async (droneInfo) => {  
 
     try {
-      let res = await (await fetch('https://jsonplaceholder.typicode.com/todos/1')).json()
-      console.log(res)
+      //let res = await (await fetch('https://jsonplaceholder.typicode.com/todos/1')).json()
+     
       dispatch({
-        type: GET_DATA,
-        payload: res
+        type: ADD_DRONE,
+        payload: droneInfo
       })
     } catch (err) {
       console.error(err)
@@ -35,10 +32,8 @@ const DataState = (props) => {
     <DataContext.Provider
       value={{
         loading: state.loading,
-        more: state.more,
-        data: state.data,
-        after: state.after,
-        fetchSomeData
+        downedDrones: state.downedDrones,
+        addDrone
       }}
     >
       {props.children}

@@ -1,11 +1,11 @@
-import { GET_DATA } from '../types'
+import { ADD_DRONE } from '../types'
 
 export default(state, action) => {
     switch(action.type) {
-        case GET_DATA:
+        case ADD_DRONE:
             return {
                 ...state,
-                fetchedData: action.payload
+                downedDrones: [...state.downedDrones, action.payload]
             }
         default:
             return state

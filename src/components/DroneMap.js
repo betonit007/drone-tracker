@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { DataContext } from "../context/data/dataState";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
   InfoWindow,
+  MarkerClusterer,
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 
@@ -19,7 +21,7 @@ import { formatRelative } from "date-fns";
 //     ComboboxOption
 // } from "@reach/combobox";
 import "@reach/combobox/styles.css";
-import { blueMax } from '../assets/mapStyles/mapStyles'
+import { blueMax } from "../assets/mapStyles/mapStyles";
 
 const libraries = ["places"]; //aviods unecessary rerenders by placing array in a variable
 const mapContainerStyle = {
@@ -32,11 +34,12 @@ const center = {
 };
 
 const options = {
-    styles: blueMax,
-    disableDefaultUI: true
-}
+  styles: blueMax,
+};
 
 const DroneMap = () => {
+  const { addDrone, loading, downedDrones } = useContext(DataContext);
+  console.log(downedDrones);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -52,7 +55,21 @@ const DroneMap = () => {
         zoom={12}
         center={center}
         options={options}
-      ></GoogleMap>
+        onClick={(e) =>
+          addDrone({
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+            time: new Date(),
+          })
+        }
+      >
+        {downedDrones && downedDrones.map((drone, i) => (
+          <Marker
+            key={i}
+            position={{ lat: drone.lat, lng: drone.lng }}
+          />
+        ))}
+      </GoogleMap>
     </div>
   );
 };
