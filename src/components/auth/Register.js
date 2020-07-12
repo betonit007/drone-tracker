@@ -31,7 +31,7 @@ const Register = () => {
         <input className="bg-green-500" type="submit" />
       </form>
       <button
-        className="bg-yellow-600 rounded border"
+        className="testy rounded border"
         onClick={() => auth.signOut()}
       >
         Signout

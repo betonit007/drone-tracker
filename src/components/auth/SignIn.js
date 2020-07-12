@@ -35,7 +35,7 @@ const SignIn = () => {
           <form onSubmit={onSubmit}>
             <div>
               <label htmlFor="email">Email</label>
-              <input type="email" name="email" value={email} onChange={onChange} />
+              <input className='cool-input' type="email" name="email" value={email} onChange={onChange} />
             </div>
             <div>
               <label htmlFor="password">Password</label>
