@@ -1,7 +1,7 @@
 import React, { useReducer, createContext } from "react";
 import dataReducer from "./dataReducer";
 
-import { ADD_DRONE } from '../types'
+import { ADD_DRONE, SET_MARKER } from '../types'
 
 
 
@@ -10,7 +10,8 @@ export const DataContext = createContext();
 const DataState = (props) => {
   const [state, dispatch] = useReducer(dataReducer, {
     loading: false,
-    downedDrones: ['phantom'],
+    downedDrones: [],
+    selected: null
   });
 
   const addDrone = async (droneInfo) => {  
@@ -27,13 +28,21 @@ const DataState = (props) => {
     }
   }
 
+  const setSelected = marker => {
+    dispatch({
+      type: SET_MARKER,
+      payload: marker
+    })
+  }
 
   return (
     <DataContext.Provider
       value={{
         loading: state.loading,
         downedDrones: state.downedDrones,
-        addDrone
+        selected: state.selected,
+        addDrone,
+        setSelected
       }}
     >
       {props.children}

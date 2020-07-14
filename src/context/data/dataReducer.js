@@ -1,4 +1,4 @@
-import { ADD_DRONE } from '../types'
+import { ADD_DRONE, SET_MARKER } from '../types'
 
 export default(state, action) => {
     switch(action.type) {
@@ -6,6 +6,11 @@ export default(state, action) => {
             return {
                 ...state,
                 downedDrones: [...state.downedDrones, action.payload]
+            }
+        case SET_MARKER:
+            return {
+                ...state,
+                selected: action.payload
             }
         default:
             return state
