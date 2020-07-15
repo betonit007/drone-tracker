@@ -10,7 +10,7 @@ import {
   ComboboxList,
   ComboboxOption,
 } from "@reach/combobox";
-
+import Locate from './Locate'
 import "@reach/combobox/styles.css";
 
 const Search = ({ panTo }) => {
@@ -58,6 +58,7 @@ const Search = ({ panTo }) => {
           </ComboboxList>
         </ComboboxPopover>
       </Combobox>
+      <Locate panTo={panTo}/>
     </div>
   );
 };

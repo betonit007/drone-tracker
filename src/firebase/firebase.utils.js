@@ -24,19 +24,10 @@ export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
 
-//GET FLAMES
-export const getFlames = async () => {
-  const flamesRef = firestore.collection(`flames`);
-
-  const flames = await flamesRef.get();
- 
-};
-
-//CREATE FLAME
+//Add a lost drone
 export const addDrone = async ({lat, lng}) => {
   
   try {
-    console.log(lat, lng)
     const flameRef = firestore.collection('drones')
     await flameRef.add({ 
       lat,

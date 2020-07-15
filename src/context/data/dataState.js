@@ -15,19 +15,6 @@ const DataState = (props) => {
     selected: null
   });
 
-  // const addDrone = async (droneInfo) => {  
-
-  //   try {
-     
-  //     dispatch({
-  //       type: ADD_DRONE,
-  //       payload: droneInfo
-  //     })
-  //   } catch (err) {
-  //     console.error(err)
-  //   }
-  // }
-
   const listenForDownedDrones = () => {
     const lostDronesRef = firestore.collection('drones');
     lostDronesRef.onSnapshot((drone) => {

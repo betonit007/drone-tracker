@@ -14,9 +14,9 @@ const Locate = ({ panTo }) => {
           () => null
         );
       }}
-      className="h-12 w-12 absolute z-10 right-0 top-0 m-2"
+      className="h-10 w-10 ml-4 transform duration-75 focus:outline-none hover:rotate-45 hover:scale-110"
     >
-      <img src="./compass.png" alt="compass" />
+      <img src="./compass.svg" alt="compass"/>
     </button>
   );
 };

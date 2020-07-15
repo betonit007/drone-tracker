@@ -1,53 +1,38 @@
-import React, {useState, useContext} from 'react'
-import { signInWithGoogle } from '../../firebase/firebase.utils'
-import { AuthContext } from '../../context/auth/authState'
+import React from 'react';
+import { useForm } from "react-hook-form";
+import { auth } from '../../firebase/firebase.utils'
 
-const SignIn = () => {
-
-  const authContext = useContext(AuthContext)
-
-  const { login } = authContext
-
-    const [user, setUser] = useState({
-        email: "",
-        password: "",
-      });
+const Signin = () => {
     
-      const {email, password } = user;
-    
-      const onSubmit = (e) => {
-        e.preventDefault()
-        console.log(user)
+  const { register, handleSubmit, errors } = useForm(); //Intialize react-hook-form
+
+  const onSubmit = async (data) => {
+    try {
+      await auth.signInWithEmailAndPassword(data.email, data.password)
+
+    } catch (err) {
+      console.log(err.message)
       }
-    
-      const onChange = e => {
-        const {name, value} = e.target
-        setUser({
-          ...user,
-          [name]:value
-        })
-      }
-    
-      return (
-        
-        <div>
-            <h2>Signin</h2>
-          <form onSubmit={onSubmit}>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input className='cool-input' type="email" name="email" value={email} onChange={onChange} />
-            </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <input type="password" name="password" value={password} onChange={onChange} />
-            </div>
-            <div>
-              <input type="submit"/>
-            </div>
-          </form>
-          <button className="bg-red-500 rounded" onClick={signInWithGoogle}>Google SignIN</button>
-        </div>
-      );
-    };
-    
-export default SignIn
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col'>
+        <input 
+          className='m-2 p-2 rounded'
+          type="text" 
+          placeholder="Email" 
+          name="email" 
+          ref={register({required: true, pattern: /^\S+@\S+$/i})} 
+          />   
+        {errors.email && <span>Please enter a valid email address.</span>}
+        <input type="password" placeholder="Password" name="password" ref={register({required: true, minLength: 6})} />        
+        {errors.password && <span>Password must be at least six characters long.</span>}
+        {/* {credError && <p className="cred-error">Invalid user credentials</p> } */}
+        <input className='fire-btn' type="submit" />
+      </form>
+    </div>
+  )
+}
+
+export default Signin

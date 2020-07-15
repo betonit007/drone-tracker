@@ -9,7 +9,7 @@ import { formatRelative } from "date-fns";
 import { DataContext } from "../context/data/dataState";
 import { addDrone } from '../firebase/firebase.utils';
 import Search from './Search'
-import Locate from './Locate'
+import Logout from './Logout'
 import { blueMax } from "../assets/mapStyles/mapStyles";
 
 const libraries = ["places"]; //aviods unecessary rerenders by placing array in a variable
@@ -25,7 +25,7 @@ const center = {
 const options = {
   styles: blueMax,
   disableDefaultUI: true,
-  mapTypeControl: true,
+  mapTypeControl: window.innerWidth > 770 ? true : false,
   zoomControl: true
 };
 
@@ -38,6 +38,7 @@ const DroneMap = () => {
   useEffect(() => {
     listenForDownedDrones()
   }, [])
+
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -70,7 +71,6 @@ const DroneMap = () => {
   return (
     <div className='relative' >
       <Search panTo={panTo} />
-      <Locate panTo={panTo} />
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={12}
@@ -103,11 +103,12 @@ const DroneMap = () => {
           >
             <div>
               <h2>Drone Info</h2>
-              <p>Crash reported: {formatRelative(selected.time, new Date())}</p>
+              <p>Crash reported: {formatRelative(selected.time.toDate(), new Date())}</p>
             </div>
           </InfoWindow>
         ) : null}
       </GoogleMap>
+      <Logout />
     </div>
   );
 };
