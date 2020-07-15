@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useRef } from "react";
+import React, { useContext, useCallback, useRef, useEffect } from "react";
 import {
   GoogleMap,
   useLoadScript,
@@ -7,6 +7,7 @@ import {
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import { DataContext } from "../context/data/dataState";
+import { addDrone } from '../firebase/firebase.utils';
 import Search from './Search'
 import Locate from './Locate'
 import { blueMax } from "../assets/mapStyles/mapStyles";
@@ -29,10 +30,15 @@ const options = {
 };
 
 const DroneMap = () => {
-  const { addDrone, loading, downedDrones, selected, setSelected } = useContext(
+
+  const { loading, downedDrones, selected, setSelected, listenForDownedDrones } = useContext(
     DataContext
   );
-  console.log(downedDrones);
+
+  useEffect(() => {
+    listenForDownedDrones()
+  }, [])
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -42,8 +48,7 @@ const DroneMap = () => {
     (e) =>
       addDrone({
         lat: e.latLng.lat(),
-        lng: e.latLng.lng(),
-        time: new Date(),
+        lng: e.latLng.lng()
       }),
     []
   ); //similiar to useEffect (function should not rerender unless dependency changes (inside []'s))

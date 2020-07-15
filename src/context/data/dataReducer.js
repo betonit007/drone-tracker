@@ -5,7 +5,7 @@ export default(state, action) => {
         case ADD_DRONE:
             return {
                 ...state,
-                downedDrones: [...state.downedDrones, action.payload]
+                downedDrones: action.payload
             }
         case SET_MARKER:
             return {

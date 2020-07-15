@@ -33,15 +33,15 @@ export const getFlames = async () => {
 };
 
 //CREATE FLAME
-export const createFlame = async (flame, userId) => {
+export const addDrone = async ({lat, lng}) => {
   
   try {
-    const flameRef = firestore.collection('flames')
-    const createdAt = new Date();
+    console.log(lat, lng)
+    const flameRef = firestore.collection('drones')
     await flameRef.add({ 
-      flame,
-      createdAt,
-      userId
+      lat,
+      lng,
+      time: new Date()
     })
 
   } catch (err) {

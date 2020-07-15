@@ -1,4 +1,5 @@
 import React, { useReducer, createContext } from "react";
+import { firestore } from '../../firebase/firebase.utils'
 import dataReducer from "./dataReducer";
 
 import { ADD_DRONE, SET_MARKER } from '../types'
@@ -14,18 +15,28 @@ const DataState = (props) => {
     selected: null
   });
 
-  const addDrone = async (droneInfo) => {  
+  // const addDrone = async (droneInfo) => {  
 
-    try {
-      //let res = await (await fetch('https://jsonplaceholder.typicode.com/todos/1')).json()
+  //   try {
      
+  //     dispatch({
+  //       type: ADD_DRONE,
+  //       payload: droneInfo
+  //     })
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  // }
+
+  const listenForDownedDrones = () => {
+    const lostDronesRef = firestore.collection('drones');
+    lostDronesRef.onSnapshot((drone) => {
+      let allDroneData = drone.docs.map((d) => d.data())
       dispatch({
         type: ADD_DRONE,
-        payload: droneInfo
+        payload: allDroneData
       })
-    } catch (err) {
-      console.error(err)
-    }
+    })
   }
 
   const setSelected = marker => {
@@ -41,8 +52,8 @@ const DataState = (props) => {
         loading: state.loading,
         downedDrones: state.downedDrones,
         selected: state.selected,
-        addDrone,
-        setSelected
+        setSelected,
+        listenForDownedDrones
       }}
     >
       {props.children}
