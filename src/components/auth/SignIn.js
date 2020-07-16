@@ -19,7 +19,7 @@ const Signin = () => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col'>
         <input 
-          className='m-2 p-2 rounded'
+          className='input'
           type="text" 
           placeholder="Email" 
           name="email" 

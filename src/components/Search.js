@@ -10,7 +10,7 @@ import {
   ComboboxList,
   ComboboxOption,
 } from "@reach/combobox";
-import Locate from './Locate'
+import Locate from "./Locate";
 import "@reach/combobox/styles.css";
 
 const Search = ({ panTo }) => {
@@ -29,8 +29,9 @@ const Search = ({ panTo }) => {
   });
 
   return (
-    <div className="search focus:outline-none">
+    <div className="search">
       <Combobox
+        className=""
         onSelect={async (address) => {
           setValue(address, false);
           clearSuggestions();
@@ -58,7 +59,7 @@ const Search = ({ panTo }) => {
           </ComboboxList>
         </ComboboxPopover>
       </Combobox>
-      <Locate panTo={panTo}/>
+      <Locate panTo={panTo} />
     </div>
   );
 };

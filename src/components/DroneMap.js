@@ -9,7 +9,7 @@ import { formatRelative } from "date-fns";
 import { DataContext } from "../context/data/dataState";
 import { addDrone } from '../firebase/firebase.utils';
 import Search from './Search'
-import Logout from './Logout'
+import UserAccount from './UserAccount'
 import { blueMax } from "../assets/mapStyles/mapStyles";
 
 const libraries = ["places"]; //aviods unecessary rerenders by placing array in a variable
@@ -108,7 +108,7 @@ const DroneMap = () => {
           </InfoWindow>
         ) : null}
       </GoogleMap>
-      <Logout />
+      <UserAccount />
     </div>
   );
 };

@@ -18,7 +18,6 @@
 
   .search {
       position: absolute;
-      display: flex;
       top: 10px;
       left: 50%;
       transform: translateX(-50%);
@@ -28,10 +27,22 @@
   }
 
   .search input {
-      border-radius: 2px;
+    padding: 0.5rem;
+    font-size: 16px;
+    border-radius: 25px;
+    width: 100%;
+  }
+
+  .input-field {
       padding: 2.5px;
       font-size: 1.5rem;
       width: 100%;
+  }
+
+  .go-home {
+      position: absolute;
+      top: 0;
+      right: 0;
   }
 
   .landing-page-container {
@@ -39,4 +50,16 @@
       width: 100wh;
       background-color: #375179;
       position: relative;
+  }
+
+  .logout-menu {
+      position: absolute;
+      height: 100px;
+      width: 200px;
+      border-radius: 3px;
+      border: 1px solid lightgrey;
+      left: -145px;
+      bottom: -90px;
+      background-color: #fff;
+      z-index: 10;
   }
