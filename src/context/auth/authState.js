@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from "react";
 import { createUserProfileDocument, auth } from "../../firebase/firebase.utils";
 import authReducer from "./authReducer";
 
-import { SET_CURRENT_USER } from "../types";
+import { SET_CURRENT_USER, SET_ERROR, CLEAR_ERROR } from "../types";
 
 export const AuthContext = createContext();
 
@@ -10,12 +10,12 @@ const AuthState = (props) => {
   const [state, dispatch] = useReducer(authReducer, {
     authState: null,
     loading: true,
+    error: null,
   });
 
   //Intialize User Auth / Sign In
   const initializeAuth = () => {
     let unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
-    
       if (user) {
         const userRef = await createUserProfileDocument(user);
         userRef.onSnapshot((snap) => {
@@ -40,7 +40,7 @@ const AuthState = (props) => {
   };
 
   const registerNonGoogle = async (data) => {
-    console.log(data)
+    console.log(data);
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
         data.email,
@@ -49,8 +49,24 @@ const AuthState = (props) => {
 
       await createUserProfileDocument(user, { displayName: data.name });
     } catch (err) {
-     console.log(err.message);
+      console.log(err.message);
     }
+  };
+
+  const setError = (message) => {
+    if (!message) {
+      return;
+    }
+    dispatch({
+      type: SET_ERROR,
+      payload: message,
+    });
+  };
+
+  const clearError = () => {
+    dispatch({
+      type: CLEAR_ERROR,
+    });
   };
 
   return (
@@ -58,8 +74,11 @@ const AuthState = (props) => {
       value={{
         authState: state.authState,
         loading: state.loading,
+        error: state.error,
         initializeAuth,
-        registerNonGoogle
+        registerNonGoogle,
+        setError,
+        clearError,
       }}
     >
       {props.children}

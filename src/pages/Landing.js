@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 import SignIn from "../components/auth/SignIn";
 import GoogleSignin from "../components/auth/GoogleSigin";
 
@@ -18,6 +19,7 @@ const Landing = () => {
         <div className='text-gray-600 subtitle'>TRACKER</div>
         <SignIn />
         <GoogleSignin />
+        <Link className='text-white pt-4' to='./register'>Or click here to register!</Link>
       </div>
     </div>
   );
