@@ -16,20 +16,28 @@ const Signin = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col'>
+    <div className='mobile-width'>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col m-4'>
         <input 
-          className='input'
+          className='my-2 p-2 rounded'
           type="text" 
           placeholder="Email" 
           name="email" 
           ref={register({required: true, pattern: /^\S+@\S+$/i})} 
           />   
         {errors.email && <span>Please enter a valid email address.</span>}
-        <input type="password" placeholder="Password" name="password" ref={register({required: true, minLength: 6})} />        
+        <input 
+          className='my-2 p-2 rounded'
+          type="password" 
+          placeholder="Password" 
+          name="password" 
+          ref={register({required: true, minLength: 6})} 
+        />        
         {errors.password && <span>Password must be at least six characters long.</span>}
         {/* {credError && <p className="cred-error">Invalid user credentials</p> } */}
-        <input className='fire-btn' type="submit" />
+        <input 
+          className='my-2 p-2 rounded bg-gray-600 text-white shadow cursor-pointer' 
+          type="submit" />
       </form>
     </div>
   )

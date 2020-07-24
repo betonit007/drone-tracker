@@ -33,6 +33,10 @@
     width: 100%;
   }
 
+  .mobile-width {
+      width: 350px;
+  }
+
   .input-field {
       padding: 2.5px;
       font-size: 1.5rem;
@@ -63,3 +67,24 @@
       background-color: #fff;
       z-index: 10;
   }
+
+  .landing-title {
+      font-size: 96px;
+      color: #fff;
+  }
+
+  .radar-img {
+      height: 84px;
+      margin-top: 14px;
+  }
+
+  .subtitle {
+      font-size: 40px;
+      width: 320px;
+      height: 100px;
+      background-color: #fff;
+      text-align: center;
+      padding-top: 12px;
+      padding-right:  2px;
+      font-weight: 600;
+      clip-path: polygon(30% 22%, 70% 22%, 100% 0, 55% 100%, 45% 100%, 0 0);  }
