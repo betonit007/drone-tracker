@@ -7,7 +7,6 @@ import AlertError from '../../components/AlertError'
 const Signin = () => {
   const { register, handleSubmit, errors } = useForm(); //Intialize react-hook-form
   const { setError, clearError, error } = useContext(AuthContext);
-  console.log(error)
   const onSubmit = async (data) => {
     try {
       await auth.signInWithEmailAndPassword(data.email, data.password);
@@ -30,7 +29,7 @@ const Signin = () => {
           name="email"
           ref={register({ required: true, pattern: /^\S+@\S+$/i })}
         />
-        {errors.email && <span>Please enter a valid email address.</span>}
+        {errors.email && <span className='text-red-500'>Please enter a valid email address.</span>}
         <input
           className="my-2 p-2 rounded"
           type="password"
@@ -39,7 +38,7 @@ const Signin = () => {
           ref={register({ required: true, minLength: 6 })}
         />
         {errors.password && (
-          <span>Password must be at least six characters long.</span>
+          <span className='text-red-500'>Password must be at least six characters long.</span>
         )}
         {/* {credError && <p className="cred-error">Invalid user credentials</p> } */}
         <input

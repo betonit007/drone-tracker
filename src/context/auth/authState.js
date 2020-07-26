@@ -40,7 +40,6 @@ const AuthState = (props) => {
   };
 
   const registerNonGoogle = async (data) => {
-    console.log(data);
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
         data.email,
@@ -49,7 +48,10 @@ const AuthState = (props) => {
 
       await createUserProfileDocument(user, { displayName: data.name });
     } catch (err) {
-      console.log(err.message);
+      setError(err.message);
+      setTimeout(() => {
+        clearError()
+      }, 4000)
     }
   };
 

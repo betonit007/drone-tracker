@@ -1,18 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/auth/authState";
-import { auth } from "../../firebase/firebase.utils";
+import AlertError from "../../components/AlertError";
 
 const Register = () => {
   const authContext = useContext(AuthContext);
 
   const { register, handleSubmit, errors } = useForm(); //Intialize react-hook-form
 
-  const { registerNonGoogle } = authContext;
+  const { registerNonGoogle, error } = authContext;
 
   return (
-    <div className="landing-page-container flex justify-center items-center">
+    <div className="relative landing-page-container flex justify-center items-center">
+      {error && <AlertError error={error} />}
       <form
         className="flex flex-col m-4 mobile-width"
         onSubmit={handleSubmit(registerNonGoogle)}
@@ -53,7 +54,9 @@ const Register = () => {
           className="my-2 p-2 rounded bg-gray-600 text-white shadow cursor-pointer"
           type="submit"
         />
-        <Link className='text-white text-center p-4' to="/">Click here to Signin</Link>
+        <Link className="text-white text-center p-4" to="/">
+          Click here to Signin
+        </Link>
       </form>
     </div>
   );
