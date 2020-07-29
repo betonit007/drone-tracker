@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { AuthContext } from "./context/auth/authState";
 import PrivateRoute from './routing/PrivateRoute'
-import Test from "./pages/Test";
 import Landing from "./pages/Landing";
 import Register from './pages/Register'
 import Main from "./pages/Main";
@@ -27,7 +26,6 @@ const App = () => {
       <Switch>
         <Route exact path="/" render={()=> authState ? <Redirect to='/map'/> : <Landing />} />
         <Route exact path="/register" render={()=> authState ? <Redirect to='/map'/> : <Register />} />
-        <Route exact path="/test" component={Test} />
         <PrivateRoute exact path="/map" component={Main} authState={authState}/>
         <Route component={NoMatch} />
       </Switch>

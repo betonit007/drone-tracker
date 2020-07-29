@@ -24,55 +24,5 @@ export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
 
-//Add a lost drone
-export const addDrone = async ({lat, lng}) => {
-  
-  try {
-    const droneRef = firestore.collection('drones')
-    await droneRef.add({ 
-      lat,
-      lng,
-      time: new Date()
-    })
 
-  } catch (err) {
-    console.log(err.message)
-  }
-}
 
-export const deleteDrone = async(id) => {  
-  
-  try {
-    firestore.collection('drones').doc(id).delete() //delete drone by id 
-  } catch (err) {
-    console.log(err.message)
-  }
-}
-
-//VERIFY USER / CREATE USER IF DOESN'T EXIT
-export const createUserProfileDocument = async (userAuth, additionalData) => {
-  
-  if (!userAuth) return;
-
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
-
-  const snapShot = await userRef.get();
-
-  if (!snapShot.exists) {
-    const { displayName, email, photoURL } = userAuth;
-    const createdAt = new Date();
-
-    try {
-      await userRef.set({
-        displayName,
-        email,
-        createdAt,
-        photoURL,
-        ...additionalData,
-      });
-    } catch (err) {
-      console.log(err.message);
-    }
-  }
-  return userRef;
-};

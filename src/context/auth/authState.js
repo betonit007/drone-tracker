@@ -1,5 +1,5 @@
 import React, { useReducer, createContext } from "react";
-import { createUserProfileDocument, auth } from "../../firebase/firebase.utils";
+import { firestore, auth } from "../../firebase/firebase.utils";
 import authReducer from "./authReducer";
 
 import { SET_CURRENT_USER, SET_ERROR, CLEAR_ERROR } from "../types";
@@ -12,6 +12,34 @@ const AuthState = (props) => {
     loading: true,
     error: null,
   });
+
+  //VERIFY USER / CREATE USER IF DOESN'T EXIT
+  const createUserProfileDocument = async (userAuth, additionalData) => {
+
+    if (!userAuth) return;
+
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+    const snapShot = await userRef.get();
+
+    if (!snapShot.exists) {
+      const { displayName, email, photoURL } = userAuth;
+      const createdAt = new Date();
+
+      try {
+        await userRef.set({
+          displayName,
+          email,
+          createdAt,
+          photoURL,
+          ...additionalData,
+        });
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+    return userRef;
+  };
 
   //Intialize User Auth / Sign In
   const initializeAuth = () => {
@@ -77,6 +105,7 @@ const AuthState = (props) => {
         authState: state.authState,
         loading: state.loading,
         error: state.error,
+        createUserProfileDocument,
         initializeAuth,
         registerNonGoogle,
         setError,

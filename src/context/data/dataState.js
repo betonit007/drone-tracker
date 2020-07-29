@@ -31,6 +31,32 @@ const DataState = (props) => {
     })
   }
 
+  //Add a lost drone
+const addDrone = async ({lat, lng, userId}) => {
+  console.log(userId)
+  try {
+    const droneRef = firestore.collection('drones')
+    await droneRef.add({ 
+      userId,
+      lat,
+      lng,
+      time: new Date()
+    })
+
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
+//Delete drone from firstore database
+const deleteDrone = async(id) => {  
+  try {
+    firestore.collection('drones').doc(id).delete() //delete drone by id 
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
   const setSelected = marker => {
     dispatch({
       type: SET_MARKER,
@@ -45,7 +71,9 @@ const DataState = (props) => {
         downedDrones: state.downedDrones,
         selected: state.selected,
         setSelected,
-        listenForDownedDrones
+        listenForDownedDrones,
+        addDrone,
+        deleteDrone
       }}
     >
       {props.children}

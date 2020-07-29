@@ -7,7 +7,7 @@ import {
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import { DataContext } from "../context/data/dataState";
-import { addDrone, deleteDrone } from '../firebase/firebase.utils';
+import { AuthContext } from "../context/auth/authState";
 import Search from './Search'
 import UserAccount from './UserAccount'
 import { blueMax } from "../assets/mapStyles/mapStyles";
@@ -31,10 +31,9 @@ const options = {
 
 const DroneMap = () => {
 
-  const { loading, downedDrones, selected, setSelected, listenForDownedDrones } = useContext(
-    DataContext
-  );
-
+  const { loading, downedDrones, selected, setSelected, listenForDownedDrones, addDrone, deleteDrone } = useContext(DataContext);
+  const { authState: { currentUser } } = useContext(AuthContext)
+  console.log(currentUser?.id)
   useEffect(() => {
     listenForDownedDrones()
   }, [])
@@ -45,14 +44,12 @@ const DroneMap = () => {
     libraries,
   });
 
-  const onMapClick = useCallback(
-    (e) =>
-      addDrone({
-        lat: e.latLng.lat(),
-        lng: e.latLng.lng()
-      }),
-    []
-  ); //similiar to useEffect (function should not rerender unless dependency changes (inside []'s))
+  const onMapClick = (e) =>
+    addDrone({
+      userId: currentUser?.id,
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    })
 
   const mapRef = useRef(); //by saving this ref to map, we can access anywhere we want in code and it will not cause rerender
   const onMapLoad = useCallback((map) => {
@@ -100,15 +97,18 @@ const DroneMap = () => {
           <InfoWindow
             position={{ lat: selected.lat, lng: selected.lng }}
             onCloseClick={() => setSelected(null)}
+            options={{pixelOffset: new window.google.maps.Size(-8,-15)}}
           >
             <div>
               <h2>Drone Info</h2>
               <p>Crash reported: {formatRelative(selected.time.toDate(), new Date())}</p>
-              <button
-                className="my-2 p-2 rounded bg-gray-600 text-white shadow cursor-pointer"
-                onClick={() => deleteDrone(selected.id)}>
-                Delete
-              </button>
+              {currentUser.id === selected.userId &&
+                <button
+                  className="my-2 p-2 rounded bg-gray-600 text-white shadow cursor-pointer"
+                  onClick={() => deleteDrone(selected.id, currentUser?.id)}>
+                  Delete
+                </button>
+              }
             </div>
           </InfoWindow>
         ) : null}
