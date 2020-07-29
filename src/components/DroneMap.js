@@ -7,7 +7,7 @@ import {
 } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import { DataContext } from "../context/data/dataState";
-import { addDrone } from '../firebase/firebase.utils';
+import { addDrone, deleteDrone } from '../firebase/firebase.utils';
 import Search from './Search'
 import UserAccount from './UserAccount'
 import { blueMax } from "../assets/mapStyles/mapStyles";
@@ -59,7 +59,7 @@ const DroneMap = () => {
     mapRef.current = map;
   }, []);
 
-  const panTo = useCallback(({lat, lng}) => {
+  const panTo = useCallback(({ lat, lng }) => {
     mapRef.current.panTo({ lat, lng });
     mapRef.current.setZoom(14)
   }, [])
@@ -104,6 +104,11 @@ const DroneMap = () => {
             <div>
               <h2>Drone Info</h2>
               <p>Crash reported: {formatRelative(selected.time.toDate(), new Date())}</p>
+              <button
+                className="my-2 p-2 rounded bg-gray-600 text-white shadow cursor-pointer"
+                onClick={() => deleteDrone(selected.id)}>
+                Delete
+              </button>
             </div>
           </InfoWindow>
         ) : null}

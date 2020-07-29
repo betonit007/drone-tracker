@@ -28,13 +28,22 @@ export default firebase;
 export const addDrone = async ({lat, lng}) => {
   
   try {
-    const flameRef = firestore.collection('drones')
-    await flameRef.add({ 
+    const droneRef = firestore.collection('drones')
+    await droneRef.add({ 
       lat,
       lng,
       time: new Date()
     })
 
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
+export const deleteDrone = async(id) => {  
+  
+  try {
+    firestore.collection('drones').doc(id).delete() //delete drone by id 
   } catch (err) {
     console.log(err.message)
   }

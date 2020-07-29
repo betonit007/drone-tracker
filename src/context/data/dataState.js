@@ -18,7 +18,12 @@ const DataState = (props) => {
   const listenForDownedDrones = () => {
     const lostDronesRef = firestore.collection('drones');
     lostDronesRef.onSnapshot((drone) => {
-      let allDroneData = drone.docs.map((d) => d.data())
+      
+      let allDroneData = drone.docs.map(d => 
+        { return {
+          ...d.data(), id: d.id //return id for each drone and spread in drone data 
+        }
+      })
       dispatch({
         type: ADD_DRONE,
         payload: allDroneData
