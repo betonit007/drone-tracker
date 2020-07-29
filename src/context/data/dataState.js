@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from "react";
 import { firestore } from '../../firebase/firebase.utils'
 import dataReducer from "./dataReducer";
 
-import { ADD_DRONE, SET_MARKER } from '../types'
+import { ADD_DRONE, SET_MARKER, SET_DRONE } from '../types'
 
 
 
@@ -12,7 +12,8 @@ const DataState = (props) => {
   const [state, dispatch] = useReducer(dataReducer, {
     loading: false,
     downedDrones: [],
-    selected: null
+    selected: null,
+    newDrone: null
   });
 
   const listenForDownedDrones = () => {
@@ -32,12 +33,12 @@ const DataState = (props) => {
   }
 
   //Add a lost drone
-const addDrone = async ({lat, lng, userId}) => {
-  console.log(userId)
+const addDrone = async ({lat, lng, currentUser}) => {
+  console.log(currentUser)
   try {
     const droneRef = firestore.collection('drones')
     await droneRef.add({ 
-      userId,
+      reportedBy: currentUser,
       lat,
       lng,
       time: new Date()
@@ -64,14 +65,24 @@ const deleteDrone = async(id) => {
     })
   }
 
+  const setNewDroneInfo = info => {
+    console.log('called')
+    dispatch({
+      type: SET_DRONE,
+      payload: info
+    })
+  }
+
   return (
     <DataContext.Provider
       value={{
         loading: state.loading,
         downedDrones: state.downedDrones,
         selected: state.selected,
+        newDrone: state.newDrone,
         setSelected,
         listenForDownedDrones,
+        setNewDroneInfo,
         addDrone,
         deleteDrone
       }}

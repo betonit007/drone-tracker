@@ -31,9 +31,9 @@ const options = {
 
 const DroneMap = () => {
 
-  const { loading, downedDrones, selected, setSelected, listenForDownedDrones, addDrone, deleteDrone } = useContext(DataContext);
+  const { loading, downedDrones, selected, setSelected, listenForDownedDrones, addDrone, deleteDrone, newDrone, setNewDroneInfo } = useContext(DataContext);
   const { authState: { currentUser } } = useContext(AuthContext)
-  console.log(currentUser?.id)
+
   useEffect(() => {
     listenForDownedDrones()
   }, [])
@@ -44,12 +44,12 @@ const DroneMap = () => {
     libraries,
   });
 
-  const onMapClick = (e) =>
-    addDrone({
-      userId: currentUser?.id,
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    })
+  const onMapClick = (e) => setNewDroneInfo({lat: e.latLng.lat(), lng: e.latLng.lng()})
+    // addDrone({
+    //   currentUser,
+    //   lat: e.latLng.lat(),
+    //   lng: e.latLng.lng()
+    // })
 
   const mapRef = useRef(); //by saving this ref to map, we can access anywhere we want in code and it will not cause rerender
   const onMapLoad = useCallback((map) => {
@@ -92,20 +92,36 @@ const DroneMap = () => {
               }}
             />
           ))}
+        {/* SHOW INFO WINDOW TO GATHER NEW DOWNED DRONE INFO */}
+
+        {newDrone ? (
+          <InfoWindow
+            position={{ lat: newDrone.lat, lng: newDrone.lng }}
+            onCloseClick={() => setNewDroneInfo(null)}
+          >
+            <div>
+              <h2 className='text-center font-extrabold p-2'>ADD DRONE!</h2>
+            </div>
+          </InfoWindow>
+        ) : null}
 
         {selected ? (
           <InfoWindow
             position={{ lat: selected.lat, lng: selected.lng }}
             onCloseClick={() => setSelected(null)}
-            options={{pixelOffset: new window.google.maps.Size(-8,-15)}}
+            options={{ pixelOffset: new window.google.maps.Size(-8, -15) }}
           >
             <div>
-              <h2>Drone Info</h2>
-              <p>Crash reported: {formatRelative(selected.time.toDate(), new Date())}</p>
-              {currentUser.id === selected.userId &&
+              <h2 className='text-center font-semibold p-2'>Crash Info</h2>
+              <p>Reported by: {selected.reportedBy.displayName}, {formatRelative(selected.time.toDate(), new Date())}</p>
+              {currentUser.id === selected.reportedBy.id &&
                 <button
                   className="my-2 p-2 rounded bg-gray-600 text-white shadow cursor-pointer"
-                  onClick={() => deleteDrone(selected.id, currentUser?.id)}>
+                  onClick={() => {
+                    deleteDrone(selected.id, currentUser?.id)
+                    setSelected(null)
+                  }
+                  }>
                   Delete
                 </button>
               }
