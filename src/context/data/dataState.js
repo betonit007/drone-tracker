@@ -33,11 +33,12 @@ const DataState = (props) => {
   }
 
   //Add a lost drone
-const addDrone = async ({lat, lng, currentUser}) => {
+const addDrone = async ({lat, lng, currentUser, droneName}) => {
   console.log(currentUser)
   try {
     const droneRef = firestore.collection('drones')
-    await droneRef.add({ 
+    await droneRef.add({
+      droneName, 
       reportedBy: currentUser,
       lat,
       lng,
