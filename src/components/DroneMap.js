@@ -12,6 +12,7 @@ import Search from './Search'
 import UserAccount from './UserAccount'
 import { blueMax } from "../assets/mapStyles/mapStyles";
 
+
 const libraries = ["places"]; //aviods unecessary rerenders by placing array in a variable
 const mapContainerStyle = {
   width: "100vw",
@@ -100,10 +101,11 @@ const DroneMap = () => {
         {/* SHOW INFO WINDOW TO GATHER NEW DOWNED DRONE INFO */}
 
         {newDrone ? (
-
+          
           <InfoWindow
             position={{ lat: newDrone.lat, lng: newDrone.lng }}
             onCloseClick={() => setNewDroneInfo(null)}
+            //options={{maxWidth: 250}}
           >
             <div>
               <h2 className='text-center font-extrabold p-2 w-64'>Enter Drone Info</h2>
