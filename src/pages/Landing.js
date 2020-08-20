@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from 'react-router-dom';
 import SignIn from "../components/auth/SignIn";
-import GoogleSignin from "../components/auth/GoogleSigin";
+import GoogleFacebookSignin from "../components/auth/GoogleFacebookSignin";
 
 const Landing = () => {
   return (
@@ -18,7 +18,7 @@ const Landing = () => {
         </div>
         <div className='text-gray-600 subtitle'>TRACKER</div>
         <SignIn />
-        <GoogleSignin />
+        <GoogleFacebookSignin />
         <Link className='text-white pt-4' to='./register'>Or click here to register!</Link>
       </div>
     </div>
